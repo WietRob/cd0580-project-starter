@@ -1,3 +1,12 @@
-shap==0.50.0
-pylint==4.0.4
+# Build / runtime
+pandas==3.0.5
+numpy==2.4.6
+scikit-learn==1.9.0
+matplotlib==3.11.1
+seaborn==0.13.2
+joblib==1.6.0
+
+# Development / quality
+pytest==9.1.1
+pylint==4.0.8
 autopep8==2.3.2
