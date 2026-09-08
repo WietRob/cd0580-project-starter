@@ -125,7 +125,7 @@ execution.
 
 ## Repository platform
 
-This project is hosted on **GitHub**: <https://github.com/WietRob/cd0580-project-starter>.
+This project is hosted on **GitHub**: <https://github.com/WietRob/udacity-customer-churn>.
 
 ---
 
