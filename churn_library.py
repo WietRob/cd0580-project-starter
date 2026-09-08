@@ -177,10 +177,14 @@ def encoder_helper(df, category_lst, response):
 
 
 def perform_feature_engineering(df, response):
-    """Build the feature matrix and split it into train and test sets.
+    """Encode categories, build the feature matrix and split into train/test.
+
+    Following the sequence diagram, ``encoder_helper`` is invoked here so that
+    categorical mean-encoding, feature-matrix construction and the train/test
+    split are kept together.
 
     input:
-              df: pandas dataframe
+              df: pandas dataframe (already contains the response column)
               response: response column name
     output:
               x_train: feature matrix for training
@@ -188,11 +192,13 @@ def perform_feature_engineering(df, response):
               y_train: target vector for training
               y_test: target vector for testing
     """
+    encoded_df = encoder_helper(df, CATEGORY_COLUMNS, response)
+
     encoded_cols = [col + "_" + response for col in CATEGORY_COLUMNS]
     keep_cols = QUANT_COLUMNS + encoded_cols
 
-    x_data = df[keep_cols]
-    y_data = df[response]
+    x_data = encoded_df[keep_cols]
+    y_data = encoded_df[response]
 
     x_train, x_test, y_train, y_test = train_test_split(
         x_data, y_data, test_size=0.3, random_state=42
@@ -390,7 +396,6 @@ if __name__ == "__main__":
 
     perform_eda(bank_df)
 
-    encoded_df = encoder_helper(bank_df, CATEGORY_COLUMNS, "Churn")
     x_train_data, x_test_data, y_train_data, y_test_data = \
-        perform_feature_engineering(encoded_df, "Churn")
+        perform_feature_engineering(bank_df, "Churn")
     train_models(x_train_data, x_test_data, y_train_data, y_test_data)

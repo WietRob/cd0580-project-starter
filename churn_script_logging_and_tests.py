@@ -156,7 +156,6 @@ def test_perform_feature_engineering(perform_feature_engineering):
     """
     try:
         df = _prepare_dataframe()
-        df = cls.encoder_helper(df, cls.CATEGORY_COLUMNS, "Churn")
         x_train, x_test, y_train, y_test = perform_feature_engineering(
             df, "Churn")
 
@@ -165,11 +164,18 @@ def test_perform_feature_engineering(perform_feature_engineering):
         assert x_train.shape[0] == y_train.shape[0]
         assert x_test.shape[0] == y_test.shape[0]
 
+        # encoder_helper is invoked internally (per the sequence diagram), so
+        # every encoded column must be present in the feature matrix.
+        encoded_cols = [col + "_Churn" for col in cls.CATEGORY_COLUMNS]
+        for col in encoded_cols:
+            assert col in x_train.columns, f"Missing encoded column {col}"
+
         logger.info(
             "Testing perform_feature_engineering: SUCCESS - "
-            "train=%d / test=%d samples",
+            "train=%d / test=%d samples with %d features",
             x_train.shape[0],
             x_test.shape[0],
+            x_train.shape[1],
         )
 
     except Exception as err:
@@ -187,7 +193,6 @@ def test_train_models(train_models):
     """
     try:
         df = _prepare_dataframe()
-        df = cls.encoder_helper(df, cls.CATEGORY_COLUMNS, "Churn")
         x_train, x_test, y_train, y_test = cls.perform_feature_engineering(
             df, "Churn"
         )
