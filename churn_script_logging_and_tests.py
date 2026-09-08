@@ -13,7 +13,7 @@ The tests can be run from the command line with::
     python churn_script_logging_and_tests.py
 
 Author: Roberto Schmidt
-Date created: 2026-09-07
+Date created: 07.09.2026
 """
 
 import logging
